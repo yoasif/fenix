@@ -4,6 +4,7 @@
 
 package org.mozilla.fenix.ui
 
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import okhttp3.mockwebserver.MockWebServer
@@ -15,6 +16,8 @@ import org.junit.Test
 import org.mozilla.fenix.helpers.AndroidAssetDispatcher
 import org.mozilla.fenix.helpers.HomeActivityTestRule
 import org.mozilla.fenix.helpers.TestAssetHelper
+import org.mozilla.fenix.helpers.TestAssetHelper.waitingTime
+import org.mozilla.fenix.helpers.UriIdlingResource
 import org.mozilla.fenix.ui.robots.navigationToolbar
 
 /**
@@ -30,6 +33,7 @@ import org.mozilla.fenix.ui.robots.navigationToolbar
 class NavigationToolbarTest {
     private val mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
     private lateinit var mockWebServer: MockWebServer
+    private lateinit var uriLoadedIdlingResource: UriIdlingResource
 
     /* ktlint-disable no-blank-line-before-rbrace */ // This imposes unreadable grouping.
     @get:Rule
@@ -109,6 +113,8 @@ class NavigationToolbarTest {
             verifyThreeDotMenuExists()
             verifyRefreshButton()
         }.refreshPage {
+            uriLoadedIdlingResource = UriIdlingResource(refreshWebPage.url.toString(), waitingTime)
+            IdlingRegistry.getInstance().register(uriLoadedIdlingResource)
             verifyPageContent("REFRESHED")
         }
     }
