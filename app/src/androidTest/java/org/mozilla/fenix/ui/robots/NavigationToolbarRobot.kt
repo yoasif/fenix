@@ -32,6 +32,7 @@ import org.hamcrest.CoreMatchers.not
 import org.mozilla.fenix.R
 import org.mozilla.fenix.helpers.SessionLoadedIdlingResource
 import org.mozilla.fenix.helpers.TestAssetHelper.waitingTime
+import org.mozilla.fenix.helpers.UriIdlingResource
 import org.mozilla.fenix.helpers.assertions.AwesomeBarAssertion.Companion.suggestionsAreEqualTo
 import org.mozilla.fenix.helpers.assertions.AwesomeBarAssertion.Companion.suggestionsAreGreaterThan
 import org.mozilla.fenix.helpers.click
@@ -54,7 +55,8 @@ class NavigationToolbarRobot {
 
     class Transition {
 
-        private lateinit var sessionLoadedIdlingResource: SessionLoadedIdlingResource
+        // private lateinit var sessionLoadedIdlingResource: SessionLoadedIdlingResource
+        private lateinit var uriIdlingResource: UriIdlingResource
         val mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
         fun goBackToWebsite(interact: BrowserRobot.() -> Unit): BrowserRobot.Transition {
@@ -79,7 +81,8 @@ class NavigationToolbarRobot {
             url: Uri,
             interact: BrowserRobot.() -> Unit
         ): BrowserRobot.Transition {
-            sessionLoadedIdlingResource = SessionLoadedIdlingResource()
+            // sessionLoadedIdlingResource = SessionLoadedIdlingResource()
+            uriIdlingResource = UriIdlingResource("page_load", waitingTime)
 
             mDevice.waitNotNull(
                 Until.findObject(By.res("org.mozilla.fenix.debug:id/toolbar")),
@@ -91,17 +94,19 @@ class NavigationToolbarRobot {
                 waitingTime
             )
 
+            // uriIdlingResource.beginLoad(url.toString())
             awesomeBar().perform(replaceText(url.toString()), pressImeActionButton())
+            // uriIdlingResource.endLoad(url.toString())
 
-            runWithIdleRes(sessionLoadedIdlingResource) {
-                onView(
-                    anyOf(
-                        ViewMatchers.withResourceName("browserLayout"),
-                        ViewMatchers.withResourceName("onboarding_message") // Req ETP dialog
-                    )
-                )
-                    .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
-            }
+//            runWithIdleRes(sessionLoadedIdlingResource) {
+//                onView(
+//                    anyOf(
+//                        ViewMatchers.withResourceName("browserLayout"),
+//                        ViewMatchers.withResourceName("onboarding_message") // Req ETP dialog
+//                    )
+//                )
+//                    .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+//            }
 
             BrowserRobot().interact()
             return BrowserRobot.Transition()
@@ -132,7 +137,7 @@ class NavigationToolbarRobot {
             url: Uri,
             interact: BrowserRobot.() -> Unit
         ): BrowserRobot.Transition {
-            sessionLoadedIdlingResource = SessionLoadedIdlingResource()
+            // sessionLoadedIdlingResource = SessionLoadedIdlingResource()
             mDevice.waitNotNull(
                 Until.findObject(By.res("org.mozilla.fenix.debug:id/toolbar")),
                 waitingTime
@@ -141,15 +146,15 @@ class NavigationToolbarRobot {
             urlBar().click()
             awesomeBar().perform(replaceText(url.toString()), pressImeActionButton())
 
-            runWithIdleRes(sessionLoadedIdlingResource) {
-                onView(
-                    anyOf(
-                        ViewMatchers.withResourceName("browserLayout"),
-                        ViewMatchers.withResourceName("onboarding_message") // Req for ETP dialog
-                    )
-                )
-                    .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
-            }
+//            runWithIdleRes(sessionLoadedIdlingResource) {
+//                onView(
+//                    anyOf(
+//                        ViewMatchers.withResourceName("browserLayout"),
+//                        ViewMatchers.withResourceName("onboarding_message") // Req for ETP dialog
+//                    )
+//                )
+//                    .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+//            }
 
             BrowserRobot().interact()
             return BrowserRobot.Transition()
