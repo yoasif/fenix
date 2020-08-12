@@ -8,7 +8,6 @@ import androidx.test.uiautomator.UiSelector
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.mozilla.fenix.helpers.AndroidAssetDispatcher
@@ -136,7 +135,6 @@ class MediaNotificationTest {
         }
     }
 
-    @Ignore("Flaky test, temp disabled: https://github.com/mozilla-mobile/fenix/issues/12645")
     @Test
     fun mediaSystemNotificationInPrivateModeTest() {
         val audioTestPage = TestAssetHelper.getAudioPageAsset(mockWebServer)

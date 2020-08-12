@@ -328,14 +328,7 @@ class BrowserRobot {
     }
 
     fun clickMediaPlayerPlayButton() {
-        mDevice.waitNotNull(
-            hasObject(
-                By
-                    .clazz("android.widget.Button")
-                    .textContains("Play")
-            ),
-            waitingTime
-        )
+        mediaPlayerPlayButton().waitForExists(waitingTime)
         mediaPlayerPlayButton().click()
     }
 
@@ -458,10 +451,15 @@ private fun assertMenuButton() {
 private fun tabsCounter() = onView(withId(R.id.counter_box))
 
 private fun mediaPlayerPlayButton() =
+//    mDevice.findObject(
+//        By
+//            .clazz("android.widget.Button")
+//            .textContains("Play")
+//    )
     mDevice.findObject(
-        By
-            .clazz("android.widget.Button")
-            .textContains("Play")
+        UiSelector()
+            .className("android.widget.Button")
+            .text("Play")
     )
 
 private fun assertBlueDot() {
