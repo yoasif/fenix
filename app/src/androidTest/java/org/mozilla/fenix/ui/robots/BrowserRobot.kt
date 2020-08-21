@@ -451,15 +451,10 @@ private fun assertMenuButton() {
 private fun tabsCounter() = onView(withId(R.id.counter_box))
 
 private fun mediaPlayerPlayButton() =
-//    mDevice.findObject(
-//        By
-//            .clazz("android.widget.Button")
-//            .textContains("Play")
-//    )
     mDevice.findObject(
         UiSelector()
             .className("android.widget.Button")
-            .text("Play")
+            .index(0)
     )
 
 private fun assertBlueDot() {
